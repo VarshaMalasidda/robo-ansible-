@@ -70,8 +70,15 @@
     systemd_service:
       name: catalogue
       daemon_reload: true
-  - name: enable and start catalogue
-    service:
-      name: catalogue
-      state: started
-      enabled: yes
+  - name: unmask catalogue service
+  ansible.builtin.command: systemctl unmask catalogue
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: enable and start catalogue
+  ansible.builtin.systemd:
+    name: catalogue
+    enabled: yes
+    state: started
